@@ -1,0 +1,14 @@
+python -m venv <nome> -> python -m venv v1
+<pasta>\Scripts\active -> v1\Scripts\activate 
+
+instalar bibliotecas do arquivo [ req ] -> pip install -r req
+
+ativar o ambiente virtual se não estiver ativado -> <pasta>\Scripts\active -> v1\Scripts\activate
+
+Guardar bibliotecas instaladas -> [ pip freeze > req ]
+
+Ativar o código -> streamlit run main.py
+
+rodar o streamlit -> streamlit run <nome arquivo> ou python -m streamlit run <arquivo>
+    streamlit run tst2.py
+

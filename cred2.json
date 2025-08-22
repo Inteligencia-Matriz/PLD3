@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "raiza-firebase",
+  "private_key_id": "a530709ca2adebf6a935058963307053537fb7aa",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC7ZEJko2hksWfn\nlZcdxz9EUJu811tacEejN3H9yGj+5K97EaSBYN/h09ZXOrkDplBBTbIOiUPxdpED\n1QF/n4IOtzc2SC5uDaNDCrihHVQdr+zEjA9sFxfXLbm6Vh0CcosDMSVgmDVA1EEY\n63TWukuzoNpVE26AT5X56hOu8LaROeqAtzRepAeyxi83LKL5yaQRXlEhBUTufV23\nHlyHCxHThBZR72i34Ua5K6irH3eYzl/dsWVK0PPg3kNEHwnuBCJm/7oJk4Me0VYO\nVVJK7Ni05Tpj5RbvJMFEAeGtrdLYTFGO+egoHG2UkFnxfXGc0Jw8cOlo6fkznfG6\nhceQaatdAgMBAAECggEAFvWtC9MYqJOy+SUzL38Y4ZglyMCzLPTKVjVmJlPOh4KB\n/Kh3+TEjJTJ1Fdl4TznqpeGs4gqP9E8Ua/2GcjpbL03j+ibkZ3AM05tF7VmgU4XZ\nUuidQB9hOKhd0/aWldTuctzr6Tak+bU356N7vI51VYQtFBTuKlL1+3miYUIVgFv7\nzjkAwjRHJ+/fFFR2qSw6A2wxfeGqasKYYFRZmSSIRuxjSUFlWYCAS0EcwBYqYAxz\nSO3oJL4RJTUpWe6safx9SyF79U5QCDeFFKmehxG2LDK3yNjd/3ep4w1KPucZJKYZ\nR0S7mAmAiqlhma3fRwbpxSByhus9IfGXsyNpdmBcsQKBgQD7sZeU4ZYaNHhyIY/U\nGOHJneQ1qMal/hGFurYkxgtaKsFBzwQO5ieRRZwWrZiwAXE7bb96IleJvRqY6SLL\n75ugMAugmjHebRkWHY2v9VUwEyBCrtqFK67mYPlgbIDl5ak24eHgHoCvvmzUv6Nv\nDKEqbZ5VXhoGd3CwEsVDuXdCcQKBgQC+mQbeHvaQJUgmnxub3zIVVNMJDD3AI1fv\n9pTeu7HHH4Wqt95dIVSGCyTlEzNY3j/zxCE6c1E1LQYpCIf5tu7hSAJbAYZ4uIZW\nfahUFVPnJ3/louVaTZThXCEVf0UCsvI8e5DRkUTQdT7btghuRyONIQen7rtyX+OG\nq9ZVqoaVrQKBgQDR7LR165UrNBpFbvKsPziK1ZMSojtVFUx+ElV65Gdxg/l+LvC+\nkH3t73YZgB66pelQXN/4OQ50BnJZmRF5sNZHS+tWv2TalHn49RtI6EFuAHXGyFnf\n+qg85CL6pmT32o5BBTNEn4xLiHLzGwdwRsNhRN5razofrJ0jbfRz4Qu0MQKBgQCd\nM84sSlGHFpjp8fVtnKvMWEgvgD82SHBxZWnoQ9sfp2oyIrFvEtyKKorlve5t7/HD\ndxMJCLAEMfyQv46XckCY4zG+KgXlcBytHbtGjsjDMRsWJkMRNkgDkF9hQbWDwmB1\nbl1F3JFrdijAQuW1P0udTY7o/cjxTxF0tCp2Qc37iQKBgQDUzyHAHEfX4Tm1Dhrh\nkRgLXjdq7EwZaCYw0BUEMeX5nthdAUf2uVq5qU3Emy3jBgdPIMG0dJ8qFe/+JLEC\n4j5RO41XHhv1F5KuhOmi9cTh9iIrvBLoANomWJwMFsfagsD5iIyendx6+jeBjczw\naIqudbaEoDrMEArAzqt6SVgrYw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "simplifica@raiza-firebase.iam.gserviceaccount.com",
+  "client_id": "101325155658435598026",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/simplifica%40raiza-firebase.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
