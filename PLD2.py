@@ -9,7 +9,7 @@ from google.oauth2.service_account import Credentials
 # ------------------------------------------------------------
 # Configurações e credenciais
 # ------------------------------------------------------------
-CREDENCIAIS_JSON = "cred2.json"
+CREDENCIAIS_JSON = "cred.json"
 SHEET_ID = '13DvmOkiPjtXIaKLwNjBRU-klOoNzR3jmw0rNUioai7Y'
 ABA_USUARIOS = 'Info Professores'
 
