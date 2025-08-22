@@ -7,7 +7,7 @@ import time
 from google.oauth2.service_account import Credentials
 
 # ------------------------------------------------------------
-# Configurações e credenciais
+# Configurações e credenciais --
 # ------------------------------------------------------------
 CREDENCIAIS_JSON = "cred.json"
 SHEET_ID = '13DvmOkiPjtXIaKLwNjBRU-klOoNzR3jmw0rNUioai7Y'
