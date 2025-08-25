@@ -18,3 +18,9 @@ Fazendo push direto do Git -> git push -u origin main
 Verificando se os caminhos do Git estão certos para o push no Github -> git remote -v
 
 Verificando o status do repositório local -> git status
+
+escolher um arquivo específico para dar push -> git add <nome arquivo>
+
+adicionar uma descrição de commit -> git commit -m "<descrição>"
+
+dar push para o github -> git push
