@@ -11,4 +11,3 @@ Ativar o código -> streamlit run main.py
 
 rodar o streamlit -> streamlit run <nome arquivo> ou python -m streamlit run <arquivo>
     streamlit run tst2.py
-

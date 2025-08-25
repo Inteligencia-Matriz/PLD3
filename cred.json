@@ -1,0 +1,26 @@
+{
+  "type": "service_account",
+  "project_id": "streamlitprojectpld",
+  "private_key_id": "97e6e0ea5d7fff7a94806c4277f6cec09d669296",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCNUCE7HOt+crN6\nr3wKxa6SyvHIOZT7tzx49VGBAAK5rFMRZ2ULEvTDbzQJYScgImWEbOfTyyv+l0ON\nlo2+Jo2b7x/zrdYEDsYgQY35Ypm613u69UkBIDMlc+TbaPmUwq/7fRttw63sJsRt\nDSrFbytODhcYIF+mSIWkolEifp+LI5aJSlz+/mSqh/6qwE4mSnhMNwec+ue3lbot\nxIx3tV6ulaZ5rCgr+hOhNXvDoAhrYXiAMXcbx114eXB9OBs1lmaikIv7xPWffDRW\nr9uofF0S6QPJdoyd7/3BiYtuNPT+SK+wt7kwwsUK4UjrRgybVyWGoVRWpr5jXFFc\nMgVugKQtAgMBAAECggEAARnLMHkwsmr1T/LW/gR9MCKJkJw2N2G9hFmw2VblLooT\nmZKbHGN46Z7PonURx3PNI6NviNxPyutluNAf6YfGWZ0avByyCpUM4Qpxrywf828j\nRRkNCQe1rkiBU141d32uvkBCuu+nxqukow7TsvcDONfuQR9bb2GoPNiQ1jpzRrOs\nzWkgFKbyX5IOzCw4Gkowkykn12wf19xVghkEZcAv1lWQiw34JuUWWVwUdP53itiS\nDR8f8FqzBePFy6UrYiZuNkRL6cq7z5K93DWjUDw4+cQhySnMsJDF1BBI1YE2anwz\nahxtfgbHKOjCzcyScI251Q/A5MOQ1e3V1xedIrNERwKBgQC/+nepJKqe3pmKyx3C\nwB5ispCpCN5ZDbrgGw3F6gdKBIvP/FftijVwbT2236p4/uQExrBy9iDh1Ph26sp0\nHlvHjhLTEu5QfF5IwIIirUEcRJ5kr8YAdwOFq3OndzK9cswYRDygy6OthQItZeDY\nSBvxtZN7uLccTU2Sb+DSNvx3iwKBgQC8cEUKt/Z8ksxrO6VqTDMsPcP0eo3BkfI8\nZTFjINGkEuUKlSR8ZHgKiEASlMPlhQFj1P8a+XOlN0n4nDl8TjuxiRQSoM3RXQKf\no3ftswB5um3y8shw477je5OPUoDgsQnOLaAm9ekXLacWObxXHT2EKIR3Urxu8FyW\n14d+x/0KJwKBgQCrw2EEiLXPZsJhl9GMyW9mRvV/B1xIuSwWDp6IERdsdhzRfaj9\n8sZVTKgG0p8nmoZQb6S3dtd8tpuHahKxSeg75zWYfDuU73E8DmFgvTqgHBTLaSjy\niYkxM3FKyC8xqWBJ5eOIyiorufF0xM4jNIEsBZVrAJ10SQW6mza/XksMeQKBgBvW\nsjx9JQsOXOjSrQNhMoYssdBicqLQPusxP/SXGqGUsQW5NuSxqxJTQrP8ClzUI3pu\nMyn3BGC6JFF4Mv3sSOFXkQGXhBCUHxkae1NAiKdzJV8pAve6ja7pyMj5tVR8kyhE\nkU5wMflcozyjVvG/viDSI4/FR1VUaTlXqgrO3NEtAoGAO1CdD07cPjr4ZP9+hUrm\nkQsNY38dwlwcusT/XH+8nidgnRtUCgypxXvvWlM9ZSnN1huqqnl7dWlOTaDxI6gv\nTrtSMO1A3oVH+T/3rKaR1XfMImSOmmwxhsf3oJM4co903CnDiOQj3vbamvweTCNI\n+LjhlQjfT2GsBLohr0w5abo=\n-----END PRIVATE KEY-----\n",
+  "client_email": "streamlitprojectpld@streamlitprojectpld.iam.gserviceaccount.com",
+  "client_id": "102477168400291652180",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/streamlitprojectpld%40streamlitprojectpld.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
+
+[gcp_service_account]
+type: "service_account",
+project_id: "streamlitprojectpld",
+private_key_id: "97e6e0ea5d7fff7a94806c4277f6cec09d669296",
+private_key: "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCNUCE7HOt+crN6\nr3wKxa6SyvHIOZT7tzx49VGBAAK5rFMRZ2ULEvTDbzQJYScgImWEbOfTyyv+l0ON\nlo2+Jo2b7x/zrdYEDsYgQY35Ypm613u69UkBIDMlc+TbaPmUwq/7fRttw63sJsRt\nDSrFbytODhcYIF+mSIWkolEifp+LI5aJSlz+/mSqh/6qwE4mSnhMNwec+ue3lbot\nxIx3tV6ulaZ5rCgr+hOhNXvDoAhrYXiAMXcbx114eXB9OBs1lmaikIv7xPWffDRW\nr9uofF0S6QPJdoyd7/3BiYtuNPT+SK+wt7kwwsUK4UjrRgybVyWGoVRWpr5jXFFc\nMgVugKQtAgMBAAECggEAARnLMHkwsmr1T/LW/gR9MCKJkJw2N2G9hFmw2VblLooT\nmZKbHGN46Z7PonURx3PNI6NviNxPyutluNAf6YfGWZ0avByyCpUM4Qpxrywf828j\nRRkNCQe1rkiBU141d32uvkBCuu+nxqukow7TsvcDONfuQR9bb2GoPNiQ1jpzRrOs\nzWkgFKbyX5IOzCw4Gkowkykn12wf19xVghkEZcAv1lWQiw34JuUWWVwUdP53itiS\nDR8f8FqzBePFy6UrYiZuNkRL6cq7z5K93DWjUDw4+cQhySnMsJDF1BBI1YE2anwz\nahxtfgbHKOjCzcyScI251Q/A5MOQ1e3V1xedIrNERwKBgQC/+nepJKqe3pmKyx3C\nwB5ispCpCN5ZDbrgGw3F6gdKBIvP/FftijVwbT2236p4/uQExrBy9iDh1Ph26sp0\nHlvHjhLTEu5QfF5IwIIirUEcRJ5kr8YAdwOFq3OndzK9cswYRDygy6OthQItZeDY\nSBvxtZN7uLccTU2Sb+DSNvx3iwKBgQC8cEUKt/Z8ksxrO6VqTDMsPcP0eo3BkfI8\nZTFjINGkEuUKlSR8ZHgKiEASlMPlhQFj1P8a+XOlN0n4nDl8TjuxiRQSoM3RXQKf\no3ftswB5um3y8shw477je5OPUoDgsQnOLaAm9ekXLacWObxXHT2EKIR3Urxu8FyW\n14d+x/0KJwKBgQCrw2EEiLXPZsJhl9GMyW9mRvV/B1xIuSwWDp6IERdsdhzRfaj9\n8sZVTKgG0p8nmoZQb6S3dtd8tpuHahKxSeg75zWYfDuU73E8DmFgvTqgHBTLaSjy\niYkxM3FKyC8xqWBJ5eOIyiorufF0xM4jNIEsBZVrAJ10SQW6mza/XksMeQKBgBvW\nsjx9JQsOXOjSrQNhMoYssdBicqLQPusxP/SXGqGUsQW5NuSxqxJTQrP8ClzUI3pu\nMyn3BGC6JFF4Mv3sSOFXkQGXhBCUHxkae1NAiKdzJV8pAve6ja7pyMj5tVR8kyhE\nkU5wMflcozyjVvG/viDSI4/FR1VUaTlXqgrO3NEtAoGAO1CdD07cPjr4ZP9+hUrm\nkQsNY38dwlwcusT/XH+8nidgnRtUCgypxXvvWlM9ZSnN1huqqnl7dWlOTaDxI6gv\nTrtSMO1A3oVH+T/3rKaR1XfMImSOmmwxhsf3oJM4co903CnDiOQj3vbamvweTCNI\n+LjhlQjfT2GsBLohr0w5abo=\n-----END PRIVATE KEY-----\n",
+client_email: "streamlitprojectpld@streamlitprojectpld.iam.gserviceaccount.com",
+client_id: "102477168400291652180",
+auth_uri: "https://accounts.google.com/o/oauth2/auth",
+token_uri: "https://oauth2.googleapis.com/token",
+auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/streamlitprojectpld%40streamlitprojectpld.iam.gserviceaccount.com",
+universe_domain: "googleapis.com"
