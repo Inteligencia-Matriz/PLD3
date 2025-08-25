@@ -11,3 +11,10 @@ Ativar o código -> streamlit run main.py
 
 rodar o streamlit -> streamlit run <nome arquivo> ou python -m streamlit run <arquivo>
     streamlit run tst2.py
+
+--------------------------------------
+Fazendo push direto do Git -> git push -u origin main
+
+Verificando se os caminhos do Git estão certos para o push no Github -> git remote -v
+
+Verificando o status do repositório local -> git status
