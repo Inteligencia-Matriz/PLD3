@@ -1,3 +1,7 @@
+"""
+V1.0 - Versão base feita pelo Valente  
+"""
+
 import streamlit as st
 import gspread
 import bcrypt
