@@ -1,3 +1,8 @@
+"""
+V1.0 - Versão base feita pelo Valente
+V1.1 - versão mais personalizada e sem a barra lateral
+"""
+
 import streamlit as st
 import gspread
 import bcrypt
