@@ -1,11 +1,18 @@
 """
 v1.0 - Versão base feita pelo Valente
+
 v1.1 - versão mais personalizada e sem a barra lateral
+
 v1.2 - Adição de estruturas para melhorar o acesso das informações mais especificas ao invés de analisar toda a páginna da planilha - Turmas, Unidades e Disciplinas
+
 v1.3 - Adição de caches para otimizar o acesso ao Google 
             > Cache de Recurso (@st.cache_resource) = Usado para objetos "pesados" que são criados uma única vez e raramente mudam, como a conexão com a API (gspread_client)
             > Cache de Memória Rápida (@lru_cache) = Usado para funções que são chamadas múltiplas vezes dentro de um mesmo script run (uma única atualização da tela)
             > Cache de Dados (@st.cache_data) = É usado para "fotografar" o conteúdo das planilhas
+
+v1.4 - Adição de uma estrutura para verificar se o arquivo "cred.json" (arquivo local) existe ou "st.secrets" (Streamlit Cloud)
+            > Primeiro, ela tentará encontrar o arquivo local cred.json
+            > Se não encontrar o arquivo, ela procurará pelas credenciais no st.secrets (Streamlit Cloud)
 """
 
 import streamlit as st
@@ -16,6 +23,7 @@ from datetime import datetime
 import time
 from google.oauth2.service_account import Credentials
 from functools import lru_cache
+import os # <--- Adicionado para verificar a existência do arquivo
 
 # ------------------------------------------------------------
 # Configurações e credenciais
@@ -30,14 +38,34 @@ SHEET_ID = '13DvmOkiPjtXIaKLwNjBRU-klOoNzR3jmw0rNUioai7Y' # Substitua pelo seu I
 # NÍVEL 1: CACHE DE RECURSO - Conexão e Workbook
 @st.cache_resource
 def get_gspread_client():
-    """Conecta ao Google Sheets usando as credenciais e faz cache da conexão."""
-    try:
-        scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+    # <<< MODIFICAÇÃO INÍCIO >>>
+    """
+    Conecta ao Google Sheets de forma inteligente.
+    Verifica se o arquivo de credenciais local existe, senão, usa o st.secrets
+    ideal para deploy no Streamlit Community Cloud.
+    """
+    scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+    
+    # Se o arquivo `cred.json` existir (ambiente local), use-o.
+    if os.path.exists(CREDENCIAIS_JSON):
         creds = Credentials.from_service_account_file(CREDENCIAIS_JSON, scopes=scope)
+    # Senão, tente usar as credenciais do Streamlit Secrets (ambiente de nuvem)
+    else:
+        try:
+            creds = Credentials.from_service_account_info(
+                st.secrets["gcp_service_account"],
+                scopes=scope
+            )
+        except Exception:
+            st.error("Falha ao carregar credenciais. Se estiver rodando na nuvem, verifique se os 'Secrets' do Streamlit estão configurados corretamente.")
+            return None
+            
+    try:
         return gspread.authorize(creds)
     except Exception as e:
         st.error(f"❌ Erro de autenticação com o Google Sheets: {e}")
         return None
+    # <<< MODIFICAÇÃO FIM >>>
 
 @st.cache_resource
 def get_workbook():
@@ -114,7 +142,7 @@ def carregar_usuarios():
 
 def salvar_usuario(email, senha_hash):
     ws = get_ws('Info Professores')
-    df_usuarios_info = load_full_sheet_as_df('Info Professores') # Usa a função cacheada
+    df_usuarios_info = load_full_sheet_as_df('Info Professores')
     
     if ws and not df_usuarios_info.empty:
         col_senha_idx = df_usuarios_info.columns.get_loc('SENHA') + 1 if 'SENHA' in df_usuarios_info.columns else None
@@ -125,11 +153,11 @@ def salvar_usuario(email, senha_hash):
         for idx, row_email in enumerate(df_usuarios_info['EMAILPROFESSOR']):
             if row_email.strip().lower() == email:
                 ws.update_cell(idx + 2, col_senha_idx, senha_hash)
-                st.cache_data.clear() # Invalida o cache após a alteração
+                st.cache_data.clear()
                 return
 
 def registrar_log_acesso(email):
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     append_row_and_clear_cache("logs", [email, "LOGIN_OK", timestamp])
 
 # ------------------------------------------------------------
@@ -137,7 +165,6 @@ def registrar_log_acesso(email):
 # ------------------------------------------------------------
 st.set_page_config(page_title="Planejamento de Aulas", layout="wide", page_icon="🔐")
 
-# Inicializa a conexão (fica em cache) e garante que o workbook está acessível
 if get_workbook() is None:
     st.error("Falha crítica ao conectar com o Google Sheets. A aplicação não pode continuar.")
     st.stop()
@@ -145,7 +172,6 @@ if get_workbook() is None:
 if "etapa" not in st.session_state:
     st.session_state.etapa = "email"
 
-# Carrega usuários usando a nova função cacheada
 usuarios, df_info = carregar_usuarios()
 
 # --------------------------
@@ -157,7 +183,6 @@ if st.session_state.etapa == "email":
     if st.button("Continuar"):
         email = email.strip().lower()
         st.session_state.email = email
-
         if not email:
             st.error("Preencha o e-mail.")
         elif email not in usuarios:
@@ -171,7 +196,6 @@ elif st.session_state.etapa == "criar_senha":
     st.title("🔑 Crie sua senha de acesso")
     nova_senha = st.text_input("Crie sua senha", type="password")
     confirmar_senha = st.text_input("Confirme sua senha", type="password")
-
     if st.button("Criar acesso"):
         if not nova_senha or not confirmar_senha:
             st.error("Preencha os dois campos de senha.")
@@ -214,17 +238,14 @@ if st.session_state.get("etapa") == "autenticado":
     
     st.title("📋 Planejamento de Aulas")
 
-    # ---- CARREGAMENTO OTIMIZADO DE DADOS ----
     df_unid = load_full_sheet_as_df('Unidade+Discip')
     df_plan = load_full_sheet_as_df('Assunto+Marcacao')
     df_aulas = load_full_sheet_as_df('Aulas Dadas')
-    # ---- FIM DO CARREGAMENTO OTIMIZADO ----
     
     if df_unid.empty or df_plan.empty:
         st.error("Não foi possível carregar os dados de planejamento. Verifique os nomes das abas e as permissões.")
         st.stop()
 
-    # Normaliza colunas
     if 'SERIENORM' not in df_unid.columns: df_unid['SERIENORM'] = df_unid.iloc[:,5]
     if 'DISCNORM' not in df_unid.columns: df_unid['DISCNORM'] = df_unid.iloc[:,9]
     if 'SERIENORM' not in df_plan.columns: df_plan['SERIENORM'] = df_plan.iloc[:,3]
@@ -233,7 +254,6 @@ if st.session_state.get("etapa") == "autenticado":
     mat = st.session_state.prof_matricula
     id_prof = st.session_state.id_prof
 
-    # Seleção de unidade, turma e disciplina (lógica inalterada)
     unis = df_unid[df_unid['CHAPA/MATRICULA PROFESSOR'] == mat]['FILIAL'].unique()
     unidade = st.selectbox("Selecione sua unidade", options=unis)
 
@@ -314,7 +334,7 @@ if st.session_state.get("etapa") == "autenticado":
             for idx, row in planej_edit.iterrows():
                 if row['Aula Dada'] and not planej.at[idx, 'Registrada']:
                     topico = str(row['TÓPICO']) if 'TÓPICO' in row else ''
-                    subtopico = str(row.get('SUBTÓPICO', '')) # Usar .get() para segurança
+                    subtopico = str(row.get('SUBTÓPICO', ''))
 
                     novas_aulas.append([
                         id_prof, unidade, turma,
