@@ -1,7 +1,9 @@
 """
-V1.0 - Versão base feita pelo Valente
-V1.1 - versão mais personalizada e sem a barra lateral
+v1.0 - Versão base feita pelo Valente
+v1.1 - versão mais personalizada e sem a barra lateral
+v1.2 - Adição de estruturas para melhorar o acesso das informações mais especificas ao invés de analisar toda a páginna da planilha - Turmas, Unidades e Disciplinas
 """
+
 
 import streamlit as st
 import gspread
@@ -15,7 +17,7 @@ from google.oauth2.service_account import Credentials
 # Configurações e credenciais
 # ------------------------------------------------------------
 CREDENCIAIS_JSON = "cred.json"
-SHEET_ID = '---'
+SHEET_ID = '13DvmOkiPjtXIaKLwNjBRU-klOoNzR3jmw0rNUioai7Y' # Substitua pelo seu ID de planilha
 ABA_USUARIOS = 'Info Professores'
 
 # ------------------------------------------------------------
@@ -166,9 +168,7 @@ elif st.session_state.etapa == "login":
 # Etapa: Autenticado -> Planejamento de Aulas
 # --------------------------
 if st.session_state.get("etapa") == "autenticado":
-    # MODIFICAÇÃO: Exibir ID + PROF no painel lateral em vez do email
     
-
     st.title("📋 Planejamento de Aulas")
 
     # Carrega dados de unidades e planejamento
@@ -201,109 +201,100 @@ if st.session_state.get("etapa") == "autenticado":
     df_t = df_unid[(df_unid['CHAPA/MATRICULA PROFESSOR'] == mat) & (df_unid['FILIAL'] == unidade)]
     turmas = df_t['CODTURMA'].unique()
     turma = st.selectbox("Selecione sua turma", options=turmas)
-#-------------------------------------------------------------------------------------------------------------------------
- # Seleção de disciplina com a nova lógica de comparação
+    
     df_d = df_t[df_t['CODTURMA'] == turma]
     
-    # MODIFICAÇÃO: Nova lógica para filtrar disciplinas
     disciplinas_disponiveis = []
     for _, row in df_d.iterrows():
         disc_norm_unid = str(row['DISCNORM']).strip().lower()
         
-        # Verifica se existe pelo menos um registro em df_plan onde DISCNORM contém disc_norm_unid
         if not df_plan[df_plan['DISCNORM'].str.lower().str.contains(disc_norm_unid, regex=False)].empty:
             disciplinas_disponiveis.append(row['DISCIPLINA'])
     
-    disciplinas = list(set(disciplinas_disponiveis))  # Remove duplicatas
+    disciplinas = list(set(disciplinas_disponiveis))
     disciplina = st.selectbox("Selecione a disciplina", options=disciplinas if disciplinas else ["Nenhuma disciplina disponível"])
 
-    # Determina SERIENORM e DISCNORM com a nova lógica
     serie_norm = df_d[df_d['DISCIPLINA'] == disciplina]['SERIENORM'].iloc[0] if disciplina and disciplina != "Nenhuma disciplina disponível" else None
     disc_norm = df_d[df_d['DISCIPLINA'] == disciplina]['DISCNORM'].iloc[0] if disciplina and disciplina != "Nenhuma disciplina disponível" else None
-#-------------------------------------------------------------------------------------------------
-        # Filtra frentes com a nova lógica de comparação
+    
     df_filtered = pd.DataFrame()
     if serie_norm and disc_norm:
-        # MODIFICAÇÃO: Filtra onde DISCNORM de Assunto+Marcacao CONTÉM DISCNORM de Unidade+Discip
         df_filtered = df_plan[
             (df_plan['SERIENORM'] == serie_norm) & 
             (df_plan['DISCNORM'].str.lower().str.contains(disc_norm.lower(), regex=False))
-        ].copy()  # Usar copy() para evitar SettingWithCopyWarning
+        ].copy()
 
-    # MODIFICAÇÃO: Verificar se a coluna 'DISCIPLINA' existe no DataFrame filtrado
     if not df_filtered.empty and 'DISCIPLINA' in df_filtered.columns:
         frentes = df_filtered['DISCIPLINA'].unique()
     else:
         frentes = []
     
     frente = st.selectbox("Selecione a frente da disciplina", 
-                         options=frentes if len(frentes) > 0 else ["Nenhuma frente disponível"])
+                          options=frentes if len(frentes) > 0 else ["Nenhuma frente disponível"])
 
-    # MODIFICAÇÃO: Definir df_frente de forma segura
     if frente and frente != "Nenhuma frente disponível" and not df_filtered.empty and 'DISCIPLINA' in df_filtered.columns:
         df_frente = df_filtered[df_filtered['DISCIPLINA'] == frente].copy()
     else:
         df_frente = pd.DataFrame()
 
-    #-------------------------------------------------------------------------------------------------
-
     st.write("### Planejamento Semanal")
     if not df_frente.empty:
-        # Definir colunas_planejamento de forma segura
         colunas_planejamento = [c for c in df_frente.columns if c.upper() in ['SEMANA', 'TÓPICO', 'SUBTÓPICO']]
         
-        # CORREÇÃO: Definir planej corretamente como uma cópia
         planej = df_frente[colunas_planejamento].copy() if not df_frente.empty else pd.DataFrame()
         
-        # Verificar se planej foi criado corretamente
         if planej.empty:
             st.warning("Nenhum dado de planejamento encontrado para os filtros selecionados.")
             st.stop()
 
-        # Remover linhas vazias de forma segura
         if 'TÓPICO' in planej.columns:
             planej = planej[planej['TÓPICO'].astype(str).str.strip() != ''].copy()
         
-        # Carregar aulas já dadas
-        try:
-            df_aulas = pd.DataFrame(safe_get_all_values(sheets['aulas']))
-            if not df_aulas.empty:
-                df_aulas.columns = df_aulas.iloc[0]
-                df_aulas = df_aulas[1:].reset_index(drop=True)
-            else:
-                df_aulas = pd.DataFrame(columns=['Codigo Professor', 'Unidade', 'Turma', 'Disciplina', 'Topico'])
-        except Exception as e:
-            st.error(f"Erro ao carregar aulas dadas: {e}")
-            df_aulas = pd.DataFrame(columns=['Codigo Professor', 'Unidade', 'Turma', 'Disciplina', 'Topico'])
-
-        # Inicializar colunas de controle
+        # <--- MODIFICAÇÃO INÍCIO: LÓGICA DE VERIFICAÇÃO MAIS EFICIENTE E ESPECÍFICA
+        
+        # Inicializa colunas de controle antes de qualquer lógica
         planej['Aula Dada'] = False
         planej['Registrada'] = False
-        
-        # Verificar cada tópico no planejamento
-        for idx, row in planej.iterrows():
-            try:
-                topico = str(row[colunas_planejamento[1]]) if len(colunas_planejamento) > 1 else ''
-                subtopico = str(row[colunas_planejamento[2]]) if len(colunas_planejamento) > 2 else ''
-                
-                # Verificar se já existe registro
-                registro_existe = not df_aulas[
-                    (df_aulas['Codigo Professor'].astype(str).str.contains(str(mat))) &
-                    (df_aulas['Unidade'].astype(str) == str(unidade)) &
-                    (df_aulas['Turma'].astype(str) == str(turma)) &
-                    (df_aulas['Disciplina'].astype(str) == str(disciplina)) &
-                    (df_aulas['Topico'].astype(str) == topico) &
-                    (df_aulas.get('Subtopico', '').astype(str) == subtopico)
-                ].empty
-                
-                if registro_existe:
-                    planej.at[idx, 'Aula Dada'] = True
-                    planej.at[idx, 'Registrada'] = True
-            except Exception as e:
-                st.error(f"Erro ao verificar registro para linha {idx}: {e}")
-                continue
 
-        # Configurar editor de dados
+        try:
+            # 1. Carrega a planilha de aulas dadas
+            dados_aulas = safe_get_all_values(sheets['aulas'])
+            if len(dados_aulas) > 1:
+                df_aulas = pd.DataFrame(dados_aulas[1:], columns=dados_aulas[0])
+                # Garante que as colunas usadas na filtragem sejam do tipo string para evitar erros
+                cols_to_str = ['Codigo Professor', 'Unidade', 'Turma', 'Disciplina', 'Topico']
+                for col in cols_to_str:
+                    if col in df_aulas.columns:
+                        df_aulas[col] = df_aulas[col].astype(str).str.strip()
+
+                # 2. Filtra o DataFrame APENAS para o contexto atual (professor, unidade, turma, disciplina)
+                aulas_no_contexto = df_aulas[
+                    (df_aulas['Codigo Professor'] == str(id_prof).strip()) &
+                    (df_aulas['Unidade'] == str(unidade).strip()) &
+                    (df_aulas['Turma'] == str(turma).strip()) &
+                    (df_aulas['Disciplina'] == str(frente).strip())
+                ]
+
+                # 3. Cria um SET com os tópicos JÁ REGISTRADOS neste contexto (muito rápido para consultar)
+                if not aulas_no_contexto.empty:
+                    topicos_registrados = set(aulas_no_contexto['Topico'])
+
+                    # 4. Aplica a verificação no planejamento
+                    if 'TÓPICO' in planej.columns:
+                        planej['Registrada'] = planej['TÓPICO'].apply(
+                            lambda topico: str(topico).strip() in topicos_registrados
+                        )
+                        planej['Aula Dada'] = planej['Registrada']
+            else:
+                # Caso não haja aulas dadas, cria um DataFrame vazio para não quebrar a lógica de salvar
+                df_aulas = pd.DataFrame(columns=['Codigo Professor', 'Unidade', 'Turma', 'Disciplina', 'Topico', 'Subtopico'])
+
+        except Exception as e:
+            st.error(f"Erro ao verificar aulas já registradas: {e}")
+            df_aulas = pd.DataFrame(columns=['Codigo Professor', 'Unidade', 'Turma', 'Disciplina', 'Topico', 'Subtopico'])
+
+        # <--- MODIFICAÇÃO FIM
+        
         column_config = {
             "Aula Dada": st.column_config.CheckboxColumn(
                 "Aula Dada",
@@ -317,7 +308,6 @@ if st.session_state.get("etapa") == "autenticado":
             )
         }
 
-        # Exibir editor
         planej_edit = st.data_editor(
             planej,
             column_config=column_config,
@@ -326,38 +316,27 @@ if st.session_state.get("etapa") == "autenticado":
             key=f"editor_{unidade}_{turma}_{disciplina}"
         )
 
-        # Processar salvamento
         if st.button("Salvar aulas dadas"):
             novas_aulas = []
             for idx, row in planej_edit.iterrows():
                 try:
                     if row['Aula Dada'] and not planej.at[idx, 'Registrada']:
-                        topico = str(row[colunas_planejamento[1]]) if len(colunas_planejamento) > 1 else ''
-                        subtopico = str(row[colunas_planejamento[2]]) if len(colunas_planejamento) > 2 else ''
+                        topico = str(row['TÓPICO']) if 'TÓPICO' in row else ''
+                        subtopico = str(row['SUBTÓPICO']) if 'SUBTÓPICO' in row else ''
                         
-                        # Verificar novamente antes de salvar
-                        registro_existe = not df_aulas[
-                            (df_aulas['Codigo Professor'].astype(str).str.contains(str(mat))) &
-                            (df_aulas['Unidade'].astype(str) == str(unidade)) &
-                            (df_aulas['Turma'].astype(str) == str(turma)) &
-                            (df_aulas['Disciplina'].astype(str) == str(frente)) &  # MODIFICAÇÃO: Usar o valor da frente selecionada
-                            (df_aulas['Topico'].astype(str) == topico) &
-                            (df_aulas.get('Subtopico', '').astype(str) == subtopico)
-                        ].empty
-                        
-                        if not registro_existe:
-                            novas_aulas.append([
-                                st.session_state.id_prof,  # MODIFICAÇÃO: Usar somente o ID + PROF
-                                unidade,
-                                turma,
-                                datetime.now().strftime("%d/%m/%Y"),
-                                frente,  # MODIFICAÇÃO: Usar o valor da frente selecionada
-                                topico,
-                                subtopico,
-                                '', ''
-                            ])
+                        # A verificação de duplicidade agora é mais robusta, pois a coluna 'Registrada' já fez o trabalho
+                        novas_aulas.append([
+                            id_prof,
+                            unidade,
+                            turma,
+                            datetime.now().strftime("%d/%m/%Y"),
+                            frente,
+                            topico,
+                            subtopico,
+                            '', ''
+                        ])
                 except Exception as e:
-                    st.error(f"Erro ao processar linha {idx}: {e}")
+                    st.error(f"Erro ao processar linha {idx} para salvar: {e}")
                     continue
             
             if novas_aulas:
