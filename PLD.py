@@ -13,6 +13,8 @@ v1.3 - Adição de caches para otimizar o acesso ao Google
 v1.4 - Adição de uma estrutura para verificar se o arquivo "cred.json" (arquivo local) existe ou "st.secrets" (Streamlit Cloud)
             > Primeiro, ela tentará encontrar o arquivo local cred.json
             > Se não encontrar o arquivo, ela procurará pelas credenciais no st.secrets (Streamlit Cloud)
+
+v1.5 - Adição de cabeçalho com o nome do professor
 """
 
 import streamlit as st
@@ -134,7 +136,8 @@ def carregar_usuarios():
         row['EMAILPROFESSOR'].strip().lower(): {
             "senha": row.get('SENHA', ""),
             "matricula": row.get('MATRICULAPROFESSOR', ""),
-            "id_prof": row.get('ID + PROF', "")
+            "id_prof": row.get('ID + PROF', ""),
+            "nome": row.get('NOMEPROFESSOR', "")  # Adicionando nome do professor
         }
         for _, row in df_usuarios.iterrows() if 'EMAILPROFESSOR' in row and row['EMAILPROFESSOR']
     }
@@ -223,6 +226,7 @@ elif st.session_state.etapa == "login":
                     st.session_state.prof_email = email
                     st.session_state.prof_matricula = usuarios[email]["matricula"]
                     st.session_state.id_prof = usuarios[email]["id_prof"]
+                    st.session_state.prof_nome = usuarios[email]["nome"]  # Salvar nome do professor
                     registrar_log_acesso(email)
                     st.success(f"Bem-vindo, {email.split('@')[0].capitalize()}!")
                     st.rerun()
@@ -236,6 +240,21 @@ elif st.session_state.etapa == "login":
 # --------------------------
 if st.session_state.get("etapa") == "autenticado":
     
+    # ================================================
+    # CABEÇALHO DA TELA DE MARCAÇÃO DE AULAS
+    # ================================================
+    st.markdown("---")
+    
+    # Criar cabeçalho com 2 colunas (somente nome e ID)
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown(f"**🔢 ID:** {st.session_state.get('id_prof', 'Não disponível')}")
+    
+    st.markdown("---")
+    # ================================================
+    
+    # Título principal da página
     st.title("📋 Planejamento de Aulas")
 
     df_unid = load_full_sheet_as_df('Unidade+Discip')
@@ -336,9 +355,12 @@ if st.session_state.get("etapa") == "autenticado":
                     topico = str(row['TÓPICO']) if 'TÓPICO' in row else ''
                     subtopico = str(row.get('SUBTÓPICO', ''))
 
+                    # MODIFICAÇÃO: Incluir data E hora na coluna D
+                    data_hora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                    
                     novas_aulas.append([
                         id_prof, unidade, turma,
-                        datetime.now().strftime("%d/%m/%Y"),
+                        data_hora,  # Coluna D: Data e hora completas
                         frente, topico, subtopico, '', ''
                     ])
             
