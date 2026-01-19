@@ -1,5 +1,5 @@
 python -m venv <nome> -> python -m venv v1
-<pasta>\Scripts\active -> v1\Scripts\activate <-
+<pasta>\Scripts\active -> v1\Scripts\activate
 
 instalar bibliotecas do arquivo [ req ] -> pip install -r req
 
