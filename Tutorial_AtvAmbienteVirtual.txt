@@ -24,3 +24,9 @@ escolher um arquivo específico para dar push -> git add <nome arquivo>
 adicionar uma descrição de commit -> git commit -m "<descrição>"
 
 dar push para o github -> git push
+----------------------------------------------
+
+Adicionando as credenciais GitHub Secrets
+entrar no repositorio -> settings (configurações) -> barra lateral, [Secrets and variables] -> Actions -> New repository secret ->
+> Name: de nome ao secrets usando letras maiusculas (ex: GCP_CREDENTIALS)
+> Value (ou Secret): adicionar o conteudo completo do seu arquivo com as credenciais
