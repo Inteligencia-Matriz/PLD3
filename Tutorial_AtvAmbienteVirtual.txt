@@ -25,6 +25,12 @@ adicionar uma descrição de commit -> git commit -m "<descrição>"
 
 dar push para o github usando com base os arquivos que estão no pc 
 -> git push -f origin main
+
+Alterando o link do repositorio do GitHub:
+-> git remote set-url origin https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
+
+Verificar se o link do novo repositorio GitHub foi registrado:
+-> git remote -v
 ----------------------------------------------
 
 Adicionando as credenciais GitHub Secrets
